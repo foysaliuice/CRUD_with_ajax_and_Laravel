@@ -52,6 +52,9 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                  <li>
+                                    <a href="{{ route('add-student') }}">Add student</a>
+                                  </li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -75,6 +78,21 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#add").click(function(){
+          $.ajax({
+            type: 'post',
+            url: '{{ route('insert') }}',
+            data: {'std_name':$("#std_name").val(), 'std_roll':$("#std_roll").val()},
+            success:function(data){
+              
+            }
+          });
+        });
+      });
+    </script>
 </body>
 </html>
