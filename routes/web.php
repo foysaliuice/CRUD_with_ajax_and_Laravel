@@ -11,10 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/','TaskController@index');
+Route::post('insert','TaskController@insert')->name('insert');
+Route::post('delete','TaskController@delete')->name('delete');
+Route::post('update','TaskController@update')->name('update');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
