@@ -18,6 +18,13 @@
               <div class="panel panel-default">
                   <div class="panel-heading">CURD with Ajax <a href="#" id="addNew" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus pull-right"></i></a></div>
                   <div class="panel-body" id="items">
+                    <div id="alertMsg">
+                      @if (Session::has('status'))
+                        <div class="alert alert-success">
+                          <h4>{{ Session::get('status') }}</h4>
+                        </div>
+                      @endif
+                    </div>
                     <div class="msg"></div>
                     <ul class="list-group">
                       @foreach ($items as $key => $item)
@@ -50,7 +57,7 @@
             <button type="button" class="btn btn-default" id="closeBtn" data-dismiss="modal" style="display:none">Close</button>
             <button type="button" class="btn btn-warning" id="delBtn" style="display:none" data-dismiss="modal">Delete</button>
             <button type="button" class="btn btn-primary" id="saveBtn" style="display:none" data-dismiss="modal">Save changes</button>
-            <button type="button" class="btn btn-primary" id="addItems" data-dismiss="modal">Add Item</button>
+            <button type="button" class="btn btn-primary" id="addItems">Add Item</button>
           </div>
         </div>
       </div>
@@ -61,6 +68,7 @@
 
     <script type="text/javascript">
       $(document).ready(function() {
+
         $(document).on('click', '.ourItem', function(event) {
           $('#saveBtn').show();
           $('#delBtn').show();
@@ -82,9 +90,13 @@
         });
 
         $('#addItems').click(function(event) {
+          $("#itemName").focus();
           var text = $('#itemName').val();
           $.post('{{ route('insert') }}', {'text': text,'_token':$('input[name=_token]').val()}, function(data) {
             $('#items').load(location.href + ' #items');
+            setTimeout(function() {
+              $('#alertMsg').hide('fast');
+            }, 2000);
           });
         });
 
@@ -92,7 +104,9 @@
           var id = $('#id').val();
           $.post('{{ route('delete') }}', {'id': id,'_token':$('input[name=_token]').val()}, function(data) {
             $('#items').load(location.href + ' #items');
-            console.log(data);
+            setTimeout(function() {
+              $('#alertMsg').hide('fast');
+            }, 2000);
           });
         });
 
@@ -101,9 +115,17 @@
           var value = $.trim($('#itemName').val());
           $.post('{{ route('update') }}', {'id': id,'value':value,'_token':$('input[name=_token]').val()}, function(data) {
             $('#items').load(location.href + ' #items');
-            console.log(data);
+            setTimeout(function() {
+              $('#alertMsg').hide('fast');
+            }, 2000);
           });
         });
+      });
+      $(document).ready(function(){
+          $("#myModal").on('shown.bs.modal', function(){
+              $(this).find('#itemName').focus();
+              $(this).find('.ourItem').focus();
+          });
       });
     </script>
   </body>
